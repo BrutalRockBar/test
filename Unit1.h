@@ -11,10 +11,14 @@
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
+	TMemo *Memo1;
+	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };
+void CALLBACK midiCallback(HMIDIIN handle,UINT uMsg,DWORD dwInstance,DWORD dwParam1,DWORD dwParam2);
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
 //---------------------------------------------------------------------------

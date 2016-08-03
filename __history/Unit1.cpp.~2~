@@ -1,0 +1,47 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+#include <mmsystem.h>
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+HMIDIIN In;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+ midiInOpen(&In,0,(DWORD)midiCallback,0,CALLBACK_FUNCTION);
+ midiInStart(In);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
+{
+ midiInStop(In);
+ midiInReset(In);
+ midiInClose(In);
+}
+//---------------------------------------------------------------------------
+void CALLBACK midiCallback
+(
+HMIDIIN handle,
+UINT uMsg,
+DWORD dwInstance,
+DWORD dwParam1,
+DWORD dwParam2
+)
+{
+ Form1->Memo1->Lines->Add((AnsiString)dwInstance);
+ Form1->Memo1->Lines->Add((AnsiString)dwParam1);
+ Form1->Memo1->Lines->Add((AnsiString)dwParam2);
+ Form1->Memo1->Lines->Add((AnsiString)uMsg);
+ Form1->Memo1->Lines->Add("-----");
+}
+//---------------------------------------------------------------------------
