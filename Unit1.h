@@ -18,7 +18,7 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };
-void CALLBACK midiCallback(HMIDIIN handle,UINT uMsg,DWORD dwInstance,DWORD dwParam1,DWORD dwParam2);
+void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
 //---------------------------------------------------------------------------

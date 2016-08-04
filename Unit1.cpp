@@ -1,5 +1,4 @@
 //---------------------------------------------------------------------------
-
 #include <vcl.h>
 #pragma hdrstop
 #include <mmsystem.h>
@@ -18,7 +17,12 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
- midiInOpen(&In,0,(DWORD)midiCallback,0,CALLBACK_FUNCTION);
+ MMRESULT rv;
+ rv = midiInOpen(&In,0,(DWORD)midiCallback,0,CALLBACK_FUNCTION);
+	if (rv != MMSYSERR_NOERROR) {
+		ShowMessage("midiInOpen() failed...rv=%d" +rv);
+	}
+
  midiInStart(In);
 }
 //---------------------------------------------------------------------------
@@ -29,12 +33,35 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
  midiInClose(In);
 }
 //---------------------------------------------------------------------------
-void CALLBACK midiCallback(HMIDIIN handle,UINT uMsg,DWORD dwInstance,DWORD dwParam1,DWORD dwParam2)
+void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
 {
- Form1->Memo1->Lines->Add((AnsiString)dwInstance);
- Form1->Memo1->Lines->Add((AnsiString)dwParam1);
- Form1->Memo1->Lines->Add((AnsiString)dwParam2);
- Form1->Memo1->Lines->Add((AnsiString)uMsg);
+ switch(wMsg) {
+	case MIM_OPEN:
+		Form1->Memo1->Lines->Add("wMsg=MIM_OPEN");
+		break;
+	case MIM_CLOSE:
+		Form1->Memo1->Lines->Add("wMsg=MIM_CLOSE");
+		break;
+	case MIM_DATA:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_DATA, dwInstance="+dwInstance+", dwParam1="+dwParam1+", dwParam2="+dwParam2+"");
+		break;
+	case MIM_LONGDATA:
+		Form1->Memo1->Lines->Add("wMsg=MIM_LONGDATA");
+		break;
+	case MIM_ERROR:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_ERROR");
+		break;
+	case MIM_LONGERROR:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_LONGERROR");
+		break;
+	case MIM_MOREDATA:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_MOREDATA");
+		break;
+	default:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg = unknown");
+		break;
+	}
  Form1->Memo1->Lines->Add("-----");
 }
 //---------------------------------------------------------------------------
+
