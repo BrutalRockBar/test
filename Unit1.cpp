@@ -1,5 +1,6 @@
 //---------------------------------------------------------------------------
 #include <vcl.h>
+#include <iostream>
 #pragma hdrstop
 #include <mmsystem.h>
 #include "Unit1.h"
@@ -18,7 +19,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
  MMRESULT rv;
- rv = midiInOpen(&In,0,(DWORD)midiCallback,0,CALLBACK_FUNCTION);
+ rv = midiInOpen(&hMidiIn,0,(DWORD)midiCallback,0,CALLBACK_FUNCTION);
 	if (rv != MMSYSERR_NOERROR) {
 		ShowMessage("midiInOpen() failed...rv=%d" +rv);
 	}
@@ -43,7 +44,8 @@ void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, DWORD d
 		Form1->Memo1->Lines->Add("wMsg=MIM_CLOSE");
 		break;
 	case MIM_DATA:
-		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_DATA, dwInstance="+dwInstance+", dwParam1="+dwParam1+", dwParam2="+dwParam2+"");
+		//Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_DATA, dwInstance="+dwInstance+", dwParam1="+dwParam1+", dwParam2="+dwParam2+"");
+		Note(dwParam1);
 		break;
 	case MIM_LONGDATA:
 		Form1->Memo1->Lines->Add("wMsg=MIM_LONGDATA");
@@ -64,4 +66,15 @@ void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, DWORD d
  Form1->Memo1->Lines->Add("-----");
 }
 //---------------------------------------------------------------------------
-
+void Note(DWORD dwParam1)
+{
+ char s[20];
+ itoa(dwParam1,s,8);
+ Form1->Memo1->Lines->Add(s);
+ /*
+1322 46 20 >>> 20 - нажата, 46 - нота, 1322 - сила нажатия
+-----
+2002 46 00 >>> 00 - отпущена
+ */
+}
+//---------------------------------------------------------------------------
