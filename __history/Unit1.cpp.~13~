@@ -8,7 +8,7 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TForm1 *Form1;
-HMIDIIN hMidiIn;
+HMIDIIN In;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
@@ -23,14 +23,14 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 		ShowMessage("midiInOpen() failed...rv=%d" +rv);
 	}
 
- midiInStart(hMidiIn);
+ midiInStart(In);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
- midiInStop(hMidiIn);
- midiInReset(hMidiIn);
- midiInClose(hMidiIn);
+ midiInStop(In);
+ midiInReset(In);
+ midiInClose(In);
 }
 //---------------------------------------------------------------------------
 void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
