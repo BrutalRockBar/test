@@ -10,6 +10,8 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 HMIDIIN hMidiIn;
+Graphics::TBitmap * bmpDefault;
+Graphics::TBitmap * bmp;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
@@ -21,10 +23,13 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
  MMRESULT rv;
  rv = midiInOpen(&hMidiIn,0,(DWORD)midiCallback,0,CALLBACK_FUNCTION);
 	if (rv != MMSYSERR_NOERROR) {
-		ShowMessage("midiInOpen() failed...rv=%d" +rv);
+		ShowMessage("midiInOpen() failed...rv=" +rv);
 	}
 
  midiInStart(hMidiIn);
+
+ bmpDefault = new Graphics::TBitmap();
+ bmpDefault->Assign(stan->Picture->Graphic);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
@@ -32,9 +37,11 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
  midiInStop(hMidiIn);
  midiInReset(hMidiIn);
  midiInClose(hMidiIn);
+ delete bmpDefault;
 }
 //---------------------------------------------------------------------------
-void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
+void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
+											DWORD dwParam1, DWORD dwParam2)
 {
  switch(wMsg) {
 	case MIM_OPEN:
@@ -73,3 +80,38 @@ void Note(DWORD dwParam1)
  Form1->Memo1->Lines->Add(s);
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::Rend(int X, int Y, AnsiString obj)
+{
+ bmp = new Graphics::TBitmap();
+
+ if(obj == "note") bmp->Assign(note->Picture->Graphic);
+ if(obj == "bemol") bmp->Assign(bemol->Picture->Graphic);
+ if(obj == "diez") bmp->Assign(diez->Picture->Graphic);
+ if(obj == "line") bmp->Assign(line->Picture->Graphic);
+
+ bmp->TransparentColor = clWhite;
+ bmp->Transparent = true;
+
+ stan->Canvas->Draw(X,Y,bmp);
+
+ delete bmp;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Reload(void)
+{
+  stan->Canvas->Draw(0,0,bmpDefault);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+ Rend(80,25,"note");
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+  Reload();
+}
+//---------------------------------------------------------------------------
+
