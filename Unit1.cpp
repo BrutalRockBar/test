@@ -105,7 +105,7 @@ void __fastcall TForm1::Reload(void)
 
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
- Rend(80,25,"note");
+ Rend(120,0,"note");
 }
 //---------------------------------------------------------------------------
 
@@ -125,4 +125,3 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
  }
 }
 //---------------------------------------------------------------------------
-

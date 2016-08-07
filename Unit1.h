@@ -27,6 +27,8 @@ __published:	// IDE-managed Components
 	TButton *Button2;
 	TADOTable *db;
 	TButton *Button3;
+	TImage *up;
+	TImage *down;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Rend(int X, int Y, AnsiString obj);
