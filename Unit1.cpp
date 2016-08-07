@@ -114,4 +114,15 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
   Reload();
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+ db->First();
+ for (int f = 0;f < 88; f++)
+ {
+  db->Append();
+  db->FieldByName("Код_клавиши")->AsString =  Memo1->Lines->Strings[f];
+  db->Post();
+ }
+}
+//---------------------------------------------------------------------------
 

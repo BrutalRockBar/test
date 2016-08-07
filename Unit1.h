@@ -11,6 +11,8 @@
 #include <Vcl.Imaging.pngimage.hpp>
 #include <VCLTee.TeeFilters.hpp>
 #include <Vcl.Graphics.hpp>
+#include <Data.DB.hpp>
+#include <Data.Win.ADODB.hpp>
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -23,12 +25,15 @@ __published:	// IDE-managed Components
 	TImage *diez;
 	TImage *line;
 	TButton *Button2;
+	TADOTable *db;
+	TButton *Button3;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Rend(int X, int Y, AnsiString obj);
 	void __fastcall Reload(void);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
+	void __fastcall Button3Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);

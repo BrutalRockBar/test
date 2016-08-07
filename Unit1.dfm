@@ -15350,4 +15350,22 @@ object Form1: TForm1
     TabOrder = 2
     OnClick = Button2Click
   end
+  object Button3: TButton
+    Left = 8
+    Top = 505
+    Width = 75
+    Height = 25
+    Caption = 'Button3'
+    TabOrder = 3
+    OnClick = Button3Click
+  end
+  object db: TADOTable
+    ConnectionString = 
+      'Provider=Microsoft.ACE.OLEDB.16.0;Data Source=data\base\db.accdb' +
+      ';Persist Security Info=False'
+    CursorType = ctStatic
+    TableName = #1050#1083#1072#1074#1080#1096#1080
+    Left = 480
+    Top = 344
+  end
 end
