@@ -12,10 +12,37 @@ TForm1 *Form1;
 HMIDIIN hMidiIn;
 Graphics::TBitmap * bmpDefault;
 Graphics::TBitmap * bmp;
+
+struct TDataBase
+{
+ struct TTable1
+ {
+   AnsiString Table_name;
+   AnsiString nomer_key;
+   AnsiString kod_key;
+   AnsiString XY1_note;
+   AnsiString XY2_note;
+   AnsiString mode_line;
+   AnsiString kol_line;
+ };
+ TTable1 Table1;
+};
+TDataBase db;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
 {
+}
+//---------------------------------------------------------------------------
+void Table1Set(void)
+{
+ db.Table1.Table_name = "Клавиши";
+ db.Table1.nomer_key = "Номер";
+ db.Table1.kod_key = "Код";
+ db.Table1.XY1_note = "Координата ноты 1";
+ db.Table1.XY2_note = "Координата ноты 2";
+ db.Table1.mode_line = "Положение линии";
+ db.Table1.kol_line = "Кол-во линий";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -30,6 +57,8 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 
  bmpDefault = new Graphics::TBitmap();
  bmpDefault->Assign(stan->Picture->Graphic);
+
+ Table1Set();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
@@ -102,26 +131,25 @@ void __fastcall TForm1::Reload(void)
   stan->Canvas->Draw(0,0,bmpDefault);
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
- Rend(120,0,"note");
+ Rend(120,23,"note");
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::Button2Click(TObject *Sender)
 {
   Reload();
 }
 //---------------------------------------------------------------------------
+
 void __fastcall TForm1::Button3Click(TObject *Sender)
 {
- db->First();
- for (int f = 0;f < 88; f++)
- {
-  db->Append();
-  db->FieldByName("Код_клавиши")->AsString =  Memo1->Lines->Strings[f];
-  db->Post();
- }
+ AnsiString query_text = "UPDATE `"+db.Table1.Table_name+"` SET `"
+								   +db.Table1.XY1_note+"` = '666' WHERE `"
+								   +db.Table1.kod_key+"` = '172'";
+ Memo1->Text = query_text;
+ ADOQuery1->SQL->Text = query_text;
+ ADOQuery1->ExecSQL();
 }
 //---------------------------------------------------------------------------
+

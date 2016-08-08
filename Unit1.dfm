@@ -31146,13 +31146,12 @@ object Form1: TForm1
     TabOrder = 3
     OnClick = Button3Click
   end
-  object db: TADOTable
+  object ADOQuery1: TADOQuery
     ConnectionString = 
       'Provider=Microsoft.ACE.OLEDB.16.0;Data Source=data\base\db.accdb' +
       ';Persist Security Info=False'
-    CursorType = ctStatic
-    TableName = #1050#1083#1072#1074#1080#1096#1080
-    Left = 600
+    Parameters = <>
+    Left = 552
     Top = 280
   end
 end

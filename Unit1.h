@@ -25,10 +25,10 @@ __published:	// IDE-managed Components
 	TImage *diez;
 	TImage *line;
 	TButton *Button2;
-	TADOTable *db;
 	TButton *Button3;
 	TImage *up;
 	TImage *down;
+	TADOQuery *ADOQuery1;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Rend(int X, int Y, AnsiString obj);
@@ -40,9 +40,12 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };
+
+
+void TableSet(void);
+void Note(DWORD dwParam1);
 void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg,
 					DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
-void Note(DWORD dwParam1);
 
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
