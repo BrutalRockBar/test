@@ -1,0 +1,166 @@
+//---------------------------------------------------------------------------
+#include <vcl.h>
+#include <iostream>
+#pragma hdrstop
+#include <mmsystem.h>
+#include "Unit1.h"
+
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+HMIDIIN hMidiIn;
+Graphics::TBitmap * bmpDefault;
+Graphics::TBitmap * bmp;
+
+struct TDataBase
+{
+ struct TStan
+ {
+   AnsiString Table_name;
+   AnsiString nomer_key;
+   AnsiString kod_key;
+   AnsiString X_note;
+   AnsiString mode_line;
+   AnsiString mode_perenos;
+ };
+ TStan Skrip;
+ TStan Bas;
+};
+TDataBase db;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void TableSet(void)
+{
+ db.Skrip.Table_name = "Скрипичный";
+ db.Skrip.nomer_key = "Номер клавиши";
+ db.Skrip.kod_key = "Код клавиши";
+ db.Skrip.X_note = "Координата ноты";
+ db.Skrip.mode_line = "Положение линии";
+ db.Skrip.mode_perenos = "Положение переноса";
+
+ db.Bas.Table_name = "Басовый";
+ db.Bas.nomer_key = "Номер клавиши";
+ db.Bas.kod_key = "Код клавиши";
+ db.Bas.X_note = "Координата ноты";
+ db.Bas.mode_line = "Положение линии";
+ db.Bas.mode_perenos = "Положение переноса";
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+ MMRESULT rv;
+ rv = midiInOpen(&hMidiIn,0,(DWORD)midiCallback,0,CALLBACK_FUNCTION);
+	if (rv != MMSYSERR_NOERROR) {
+		ShowMessage("midiInOpen() failed...rv=" +rv);
+	}
+
+ midiInStart(hMidiIn);
+
+ bmpDefault = new Graphics::TBitmap();
+ bmpDefault->Assign(stan->Picture->Graphic);
+
+ TableSet();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
+{
+ midiInStop(hMidiIn);
+ midiInReset(hMidiIn);
+ midiInClose(hMidiIn);
+ delete bmpDefault;
+}
+//---------------------------------------------------------------------------
+void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
+											DWORD dwParam1, DWORD dwParam2)
+{
+ switch(wMsg) {
+	case MIM_OPEN:
+		Form1->Memo1->Lines->Add("wMsg=MIM_OPEN");
+		break;
+	case MIM_CLOSE:
+		Form1->Memo1->Lines->Add("wMsg=MIM_CLOSE");
+		break;
+	case MIM_DATA:
+		//Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_DATA, dwInstance="+dwInstance+", dwParam1="+dwParam1+", dwParam2="+dwParam2+"");
+		Note(dwParam1);
+		break;
+	case MIM_LONGDATA:
+		Form1->Memo1->Lines->Add("wMsg=MIM_LONGDATA");
+		break;
+	case MIM_ERROR:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_ERROR");
+		break;
+	case MIM_LONGERROR:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_LONGERROR");
+		break;
+	case MIM_MOREDATA:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_MOREDATA");
+		break;
+	default:
+		Form1->Memo1->Lines->Add((AnsiString)"wMsg = unknown");
+		break;
+	}
+ Form1->Memo1->Lines->Add("-----");
+}
+//---------------------------------------------------------------------------
+void Note(DWORD dwParam1)
+{
+ char s[20];
+ itoa(dwParam1,s,8);
+ Form1->Memo1->Lines->Add(s);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Rend(int X, int Y, AnsiString obj)
+{
+ bmp = new Graphics::TBitmap();
+
+ if(obj == "note") bmp->Assign(note->Picture->Graphic);
+ if(obj == "bemol") bmp->Assign(bemol->Picture->Graphic);
+ if(obj == "diez") bmp->Assign(diez->Picture->Graphic);
+ if(obj == "line") bmp->Assign(line->Picture->Graphic);
+
+ bmp->TransparentColor = clWhite;
+ bmp->Transparent = true;
+
+ stan->Canvas->Draw(X,Y,bmp);
+
+ delete bmp;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Reload(void)
+{
+  stan->Canvas->Draw(0,0,bmpDefault);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+ Rend(120,23,"note");
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+  Reload();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+ for(int i = 335; i <= 23; i-12)
+ {
+   AnsiString query_text = "INSERT INTO `"+db.Skrip.Table_name+"` ( `"
+								   +db.Skrip.X_note+"` VALUES ('"+i+"')";
+  ADOQuery1->SQL->Text = query_text;
+  ADOQuery1->ExecSQL();
+ }
+
+
+}
+//---------------------------------------------------------------------------
+ /*
+ AnsiString query_text = "UPDATE `"+db.Table1.Table_name+"` SET `"
+								   +db.Table1.XY1_note+"` = '666' WHERE `"
+								   +db.Table1.kod_key+"` = '172'"; */

@@ -30554,8 +30554,8 @@ object Form1: TForm1
       0000}
   end
   object note: TImage
-    Left = 544
-    Top = 389
+    Left = 264
+    Top = 575
     Width = 38
     Height = 25
     Picture.Data = {
