@@ -142,7 +142,7 @@ void __fastcall TForm1::Reload(void)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
- Rend(120,263,"line");
+ Rend(120,23,"note");
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
@@ -157,7 +157,7 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void DrawLine(int X,int Y,AnsiString clef)
 {
- int param;
+ int param;   //вверх(1) или вниз(2)
  int XClef;
  
  if(clef == "Скрипичный" && Y < 143)
@@ -187,15 +187,15 @@ void DrawLine(int X,int Y,AnsiString clef)
  {
   for(int YLine = XClef; YLine > Y; YLine = YLine - 24)
   {
-   Form1->Rend(X,YLine,"line");
+   Form1->Rend(X - 34,YLine,"line");
   }	 
  }
 
  if(param == 2) 
  {
-  for(int YLine = XClef; YLine < Y; YLine = YLine + 24)
+  for(int YLine = XClef; YLine <= Y; YLine = YLine + 24)
   {
-   Form1->Rend(X,YLine,"line");
+   Form1->Rend(X - 34,YLine,"line");
   }	 
  }
 }
