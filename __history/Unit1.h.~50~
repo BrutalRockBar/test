@@ -28,7 +28,7 @@ __published:	// IDE-managed Components
 	TButton *Button3;
 	TImage *up;
 	TImage *down;
-	TADOQuery *query;
+	TADOQuery *ADOQuery1;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Rend(int X, int Y, AnsiString obj);
@@ -38,26 +38,16 @@ __published:	// IDE-managed Components
 	void __fastcall Button3Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
-
-
 	__fastcall TForm1(TComponent* Owner);
 };
 
+
+void TableSet(void);
+void Note(DWORD dwParam1);
 void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg,
 					DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
-void Note(DWORD dwParam1);
 
-class DataBase
-{
-  public:
-  AnsiString key()
-  {
-   AnsiString name = "Клавиши";
-   return(name);
-  }
-};
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
-extern PACKAGE	DataBase *db;
 //---------------------------------------------------------------------------
 #endif

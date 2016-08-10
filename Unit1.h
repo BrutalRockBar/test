@@ -44,6 +44,7 @@ public:		// User declarations
 
 void TableSet(void);
 void Note(DWORD dwParam1);
+void DrawLine(int X,int Y,AnsiString clef);
 void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg,
 					DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
 

@@ -19,13 +19,18 @@ struct TDataBase
  {
    AnsiString Table_name;
    AnsiString nomer_key;
-   AnsiString kod_key;
    AnsiString X_note;
-   AnsiString mode_line;
-   AnsiString mode_perenos;
+ };
+
+ struct TKey
+ {
+   AnsiString Table_name;
+   AnsiString nomer_key;
+   AnsiString kod_sound;
  };
  TStan Skrip;
  TStan Bas;
+ TKey Key;
 };
 TDataBase db;
 //---------------------------------------------------------------------------
@@ -38,17 +43,15 @@ void TableSet(void)
 {
  db.Skrip.Table_name = "Скрипичный";
  db.Skrip.nomer_key = "Номер клавиши";
- db.Skrip.kod_key = "Код клавиши";
  db.Skrip.X_note = "Координата ноты";
- db.Skrip.mode_line = "Положение линии";
- db.Skrip.mode_perenos = "Положение переноса";
 
  db.Bas.Table_name = "Басовый";
  db.Bas.nomer_key = "Номер клавиши";
- db.Bas.kod_key = "Код клавиши";
  db.Bas.X_note = "Координата ноты";
- db.Bas.mode_line = "Положение линии";
- db.Bas.mode_perenos = "Положение переноса";
+
+ db.Key.Table_name = "Клавиши";
+ db.Key.nomer_key = "Номер клавиши";
+ db.Key.kod_sound = "Звук клавиши";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -139,7 +142,7 @@ void __fastcall TForm1::Reload(void)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
- Rend(120,23,"note");
+ Rend(120,263,"note");
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
@@ -149,18 +152,49 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button3Click(TObject *Sender)
 {
- for(int i = 335; i <= 23; i-12)
- {
-   AnsiString query_text = "INSERT INTO `"+db.Skrip.Table_name+"` ( `"
-								   +db.Skrip.X_note+"` VALUES ('"+i+"')";
-  ADOQuery1->SQL->Text = query_text;
-  ADOQuery1->ExecSQL();
- }
-
-
+//
 }
 //---------------------------------------------------------------------------
  /*
- AnsiString query_text = "UPDATE `"+db.Table1.Table_name+"` SET `"
+  ============
+  Редактирование:
+  AnsiString query_text = "UPDATE `"+db.Table1.Table_name+"` SET `"
 								   +db.Table1.XY1_note+"` = '666' WHERE `"
-								   +db.Table1.kod_key+"` = '172'"; */
+								   +db.Table1.kod_key+"` = '172'";
+
+
+  ============
+  Заполнение таблицы `Скрипичный` номерами клавиш и координатами:
+  int X = 335;
+  for(int i = 0; i < Memo1->Lines->Count; i++)
+  {
+  ADOQuery1->SQL->Text="SELECT * FROM `"+db.Key.Table_name+"` WHERE `"+db.Key.kod_sound+"` LIKE '"+Memo1->Lines->Strings[i]+"'";
+  ADOQuery1->Open();
+  AnsiString nomer = ADOQuery1->FieldByName(db.Key.nomer_key)->AsString;
+  ADOQuery1->Close();
+
+  AnsiString query_text = "INSERT INTO `"+db.Skrip.Table_name+"` ( `"
+										 +db.Skrip.nomer_key+"`,`"+db.Skrip.X_note+"`) VALUES ('"+nomer+"','"+X+"')";
+  ADOQuery1->SQL->Text = query_text;
+  ADOQuery1->ExecSQL();
+  X = X - 12;
+  }
+
+
+  ===========
+  Заполнение таблицы `Басовый` номерами клавиш и координатами:
+  int X = 623;
+  for(int i = 0; i < Memo1->Lines->Count; i++)
+  {
+  ADOQuery1->SQL->Text="SELECT * FROM `"+db.Key.Table_name+"` WHERE `"+db.Key.kod_sound+"` LIKE '"+Memo1->Lines->Strings[i]+"'";
+  ADOQuery1->Open();
+  AnsiString nomer = ADOQuery1->FieldByName(db.Key.nomer_key)->AsString;
+  ADOQuery1->Close();
+
+  AnsiString query_text = "INSERT INTO `"+db.Bas.Table_name+"` ( `"
+										 +db.Bas.nomer_key+"`,`"+db.Bas.X_note+"`) VALUES ('"+nomer+"','"+X+"')";
+  ADOQuery1->SQL->Text = query_text;
+  ADOQuery1->ExecSQL();
+  X = X - 12;
+ }
+ */

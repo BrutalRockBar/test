@@ -19,7 +19,7 @@ struct TDataBase
  {
    AnsiString Table_name;
    AnsiString nomer_key;
-   AnsiString X_note;
+   AnsiString Y_note;
  };
 
  struct TKey
@@ -43,11 +43,11 @@ void TableSet(void)
 {
  db.Skrip.Table_name = "Скрипичный";
  db.Skrip.nomer_key = "Номер клавиши";
- db.Skrip.X_note = "Координата ноты";
+ db.Skrip.Y_note = "Координата ноты";
 
  db.Bas.Table_name = "Басовый";
  db.Bas.nomer_key = "Номер клавиши";
- db.Bas.X_note = "Координата ноты";
+ db.Bas.Y_note = "Координата ноты";
 
  db.Key.Table_name = "Клавиши";
  db.Key.nomer_key = "Номер клавиши";
@@ -142,7 +142,7 @@ void __fastcall TForm1::Reload(void)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
- Rend(120,263,"note");
+ Rend(120,263,"line");
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
@@ -152,9 +152,53 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button3Click(TObject *Sender)
 {
-//
+ DrawLine(120,23,"Скрипичный");
 }
 //---------------------------------------------------------------------------
+void DrawLine(int X,int Y,AnsiString clef)
+{
+ int param;
+ int XClef;
+ 
+ if(clef == "Скрипичный" && Y < 143)
+ {
+  param = 1;
+  XClef = 143;
+ }
+ if(clef == "Скрипичный" && Y > 239)
+ {
+  param = 2;
+  XClef = 239;
+ }
+
+ 
+ if(clef == "Басовый" && Y < 338)
+ {
+  param = 1;
+  XClef = 338;
+ }
+ if(clef == "Басовый" && Y > 479)
+ {
+  param = 2;
+  XClef = 479;
+ }
+ 
+ if(param == 1) 
+ {
+  for(int YLine = XClef; YLine > Y; YLine = YLine - 24)
+  {
+   Form1->Rend(X,YLine,"line");
+  }	 
+ }
+
+ if(param == 2) 
+ {
+  for(int YLine = XClef; YLine < Y; YLine = YLine + 24)
+  {
+   Form1->Rend(X,YLine,"line");
+  }	 
+ }
+}
  /*
   ============
   Редактирование:
@@ -165,25 +209,25 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
 
   ============
   Заполнение таблицы `Скрипичный` номерами клавиш и координатами:
-  int X = 335;
+  int Y = 335;
   for(int i = 0; i < Memo1->Lines->Count; i++)
   {
-  ADOQuery1->SQL->Text="SELECT * FROM `"+db.Key.Table_name+"` WHERE `"+db.Key.kod_sound+"` LIKE '"+Memo1->Lines->Strings[i]+"'";
-  ADOQuery1->Open();
-  AnsiString nomer = ADOQuery1->FieldByName(db.Key.nomer_key)->AsString;
-  ADOQuery1->Close();
+   ADOQuery1->SQL->Text="SELECT * FROM `"+db.Key.Table_name+"` WHERE `"+db.Key.kod_sound+"` LIKE '"+Memo1->Lines->Strings[i]+"'";
+   ADOQuery1->Open();
+   AnsiString nomer = ADOQuery1->FieldByName(db.Key.nomer_key)->AsString;
+   ADOQuery1->Close();
 
-  AnsiString query_text = "INSERT INTO `"+db.Skrip.Table_name+"` ( `"
-										 +db.Skrip.nomer_key+"`,`"+db.Skrip.X_note+"`) VALUES ('"+nomer+"','"+X+"')";
-  ADOQuery1->SQL->Text = query_text;
-  ADOQuery1->ExecSQL();
-  X = X - 12;
+   AnsiString query_text = "INSERT INTO `"+db.Skrip.Table_name+"` ( `"
+										 +db.Skrip.nomer_key+"`,`"+db.Skrip.Y_note+"`) VALUES ('"+nomer+"','"+X+"')";
+   ADOQuery1->SQL->Text = query_text;
+   ADOQuery1->ExecSQL();
+   Y = Y - 12;
   }
 
 
   ===========
   Заполнение таблицы `Басовый` номерами клавиш и координатами:
-  int X = 623;
+  int Y = 623;
   for(int i = 0; i < Memo1->Lines->Count; i++)
   {
   ADOQuery1->SQL->Text="SELECT * FROM `"+db.Key.Table_name+"` WHERE `"+db.Key.kod_sound+"` LIKE '"+Memo1->Lines->Strings[i]+"'";
@@ -192,9 +236,9 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
   ADOQuery1->Close();
 
   AnsiString query_text = "INSERT INTO `"+db.Bas.Table_name+"` ( `"
-										 +db.Bas.nomer_key+"`,`"+db.Bas.X_note+"`) VALUES ('"+nomer+"','"+X+"')";
+										 +db.Bas.nomer_key+"`,`"+db.Bas.Y_note+"`) VALUES ('"+nomer+"','"+X+"')";
   ADOQuery1->SQL->Text = query_text;
   ADOQuery1->ExecSQL();
-  X = X - 12;
+  Y = Y - 12;
  }
  */
