@@ -148,7 +148,8 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 {
  Rend(120,23,"note");
  DrawLine(120,23,"Скрипичный");
- DrawOktava(120,23,85);
+ DrawOktava(120,88);
+ DrawTon(120, 23, "diez");
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
@@ -194,23 +195,36 @@ void DrawLine(int X,int Y,AnsiString clef)
 
  if(param == 2) 
  {
-  for(int YLine = XClef; YLine <= Y; YLine = YLine + 24)
+  for(int YLine = XClef; YLine <= Y + 24; YLine = YLine + 24)
   {
    Form1->Rend(X - 34,YLine,"line");
   }	 
  }
 }
 //---------------------------------------------------------------------------
-void DrawOktava(int X,int Y,int key)
+void DrawOktava(int X,int key)
 {
  if(key >= 75)
  {
-  Form1->Rend(X,Y - 10,"up");
+  Form1->Rend(X,0,"up");
  }
 
  if(key <= 11)
  {
-  Form1->Rend(X,Y + 10,"down");
+  Form1->Rend(X,570,"down");
+ }
+}
+//---------------------------------------------------------------------------
+void DrawTon(int X, int Y, AnsiString ton)
+{
+ if(ton == "diez")
+ {
+  Form1->Rend(X - 25,Y - 24,ton);
+ }
+
+ if(ton == "bemol")
+ {
+  Form1->Rend(X - 25,Y - 33,ton);
  }
 }
  /*
@@ -256,21 +270,5 @@ void DrawOktava(int X,int Y,int key)
   Y = Y - 12;
  }
  */
-//---------------------------------------------------------------------------
-void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
-{
- while (Panel1->Left<this->Width)
-	{
-	 Panel1->Left=Panel1->Left+40;
-	}
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::SpeedButton2Click(TObject *Sender)
-{
-  while (Panel1->Left>0)
-	{
-     Panel1->Left=Panel1->Left-40;
-	}
-}
 //---------------------------------------------------------------------------
 

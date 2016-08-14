@@ -30554,8 +30554,8 @@ object Form1: TForm1
       0000}
   end
   object note: TImage
-    Left = 144
-    Top = 199
+    Left = 544
+    Top = 399
     Width = 38
     Height = 25
     Picture.Data = {
@@ -30958,7 +30958,7 @@ object Form1: TForm1
   end
   object up: TImage
     Left = 544
-    Top = 356
+    Top = 343
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31036,7 +31036,7 @@ object Form1: TForm1
   end
   object down: TImage
     Left = 544
-    Top = 331
+    Top = 368
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31112,6 +31112,13 @@ object Form1: TForm1
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFB0000000000000000}
   end
+  object SpeedButton2: TSpeedButton
+    Left = 691
+    Top = 8
+    Width = 23
+    Height = 22
+    Caption = '<'
+  end
   object Memo1: TMemo
     Left = 544
     Top = 39
@@ -31120,7 +31127,7 @@ object Form1: TForm1
     TabOrder = 0
   end
   object Button1: TButton
-    Left = 544
+    Left = 515
     Top = 8
     Width = 75
     Height = 25
@@ -31129,7 +31136,7 @@ object Form1: TForm1
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 639
+    Left = 610
     Top = 8
     Width = 75
     Height = 25
@@ -31144,7 +31151,6 @@ object Form1: TForm1
     Height = 25
     Caption = 'Button3'
     TabOrder = 3
-    OnClick = Button3Click
   end
   object ADOQuery1: TADOQuery
     ConnectionString = 

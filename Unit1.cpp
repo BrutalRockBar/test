@@ -12,7 +12,7 @@ TForm1 *Form1;
 HMIDIIN hMidiIn;
 Graphics::TBitmap * bmpDefault;
 Graphics::TBitmap * bmp;
-
+int PanelMode = 0;
 struct TDataBase
 {
  struct TStan
@@ -68,8 +68,11 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
  bmpDefault->Assign(stan->Picture->Graphic);
 
  TableSet();
- Panel1->Left=this->Width+20;
- Panel1->Top=-2;
+
+ Panel1->Top = 0;
+ Panel1->Width = this->Width;
+ Panel1->Height = this->Height;
+ Panel1->Left = this->Width - 24;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
@@ -271,20 +274,47 @@ void DrawTon(int X, int Y, AnsiString ton)
  }
  */
 //---------------------------------------------------------------------------
-void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
+
+void __fastcall TForm1::Timer1Timer(TObject *Sender)
 {
- while (Panel1->Left<this->Width)
-	{
-	 Panel1->Left=Panel1->Left+40;
-	}
+ if(Panel1->Left >= 100)
+ {
+  Panel1->Left = Panel1->Left - 100;
+ }
+
+ if(Panel1->Left <= 100)
+ {
+  Timer1->Enabled = false;
+  Panel1->Left = 0;
+  PanelMode = 1;
+ }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::SpeedButton2Click(TObject *Sender)
+void __fastcall TForm1::Timer2Timer(TObject *Sender)
 {
-  while (Panel1->Left>0)
-	{
-     Panel1->Left=Panel1->Left-40;
-	}
+  if(Panel1->Left <= this->Width - 100)
+ {
+  Panel1->Left = Panel1->Left + 100;
+ }
+
+ if(Panel1->Left >= this->Width - 100)
+ {
+  Timer2->Enabled = false;
+  Panel1->Left = this->Width - 24;
+  PanelMode = 0;
+ }
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::Image1Click(TObject *Sender)
+{
+ if(PanelMode == 0) Timer1->Enabled = true;
+ else Timer2->Enabled = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button4Click(TObject *Sender)
+{
+ this->Close();
+}
+//---------------------------------------------------------------------------
+
 

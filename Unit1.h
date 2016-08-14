@@ -34,23 +34,21 @@ __published:	// IDE-managed Components
 	TImage *down;
 	TADOQuery *ADOQuery1;
 	TPanel *Panel1;
-	TSpeedButton *SpeedButton1;
-	TSpeedButton *SpeedButton2;
-	TIdAntiFreeze *IdAntiFreeze1;
-	TEdit *Edit1;
-	TEdit *Edit2;
+	TTimer *Timer1;
+	TImage *Image1;
+	TPanel *Panel2;
 	TButton *Button4;
-	TButton *Button5;
-	TButton *Button6;
-	TCheckBox *CheckBox1;
+	TTimer *Timer2;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Rend(int X, int Y, AnsiString obj);
 	void __fastcall Reload(void);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
-	void __fastcall SpeedButton1Click(TObject *Sender);
-	void __fastcall SpeedButton2Click(TObject *Sender);
+	void __fastcall Timer1Timer(TObject *Sender);
+	void __fastcall Image1Click(TObject *Sender);
+	void __fastcall Button4Click(TObject *Sender);
+	void __fastcall Timer2Timer(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);

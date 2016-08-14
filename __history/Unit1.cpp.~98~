@@ -127,6 +127,7 @@ void __fastcall TForm1::Rend(int X, int Y, AnsiString obj)
  if(obj == "note") bmp->Assign(note->Picture->Graphic);
  if(obj == "bemol") bmp->Assign(bemol->Picture->Graphic);
  if(obj == "diez") bmp->Assign(diez->Picture->Graphic);
+ if(obj == "line") bmp->Assign(line->Picture->Graphic);
  if(obj == "up") bmp->Assign(up->Picture->Graphic);
  if(obj == "down") bmp->Assign(down->Picture->Graphic);
 
@@ -146,17 +147,14 @@ void __fastcall TForm1::Reload(void)
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
  Rend(120,23,"note");
+ DrawLine(120,23,"Скрипичный");
+ DrawOktava(120,88);
+ DrawTon(120, 23, "diez");
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
 {
   Reload();
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::Button3Click(TObject *Sender)
-{
- DrawLine(120,23,"Скрипичный");
- DrawOktava(120,23,85);
 }
 //---------------------------------------------------------------------------
 void DrawLine(int X,int Y,AnsiString clef)
@@ -197,23 +195,36 @@ void DrawLine(int X,int Y,AnsiString clef)
 
  if(param == 2) 
  {
-  for(int YLine = XClef; YLine <= Y; YLine = YLine + 24)
+  for(int YLine = XClef; YLine <= Y + 24; YLine = YLine + 24)
   {
    Form1->Rend(X - 34,YLine,"line");
   }	 
  }
 }
 //---------------------------------------------------------------------------
-void DrawOktava(int X,int Y,int key)
+void DrawOktava(int X,int key)
 {
  if(key >= 75)
  {
-  Form1->Rend(X,Y - 10,"up");
+  Form1->Rend(X,0,"up");
  }
 
  if(key <= 11)
  {
-  Form1->Rend(X,Y + 10,"down");
+  Form1->Rend(X,570,"down");
+ }
+}
+//---------------------------------------------------------------------------
+void DrawTon(int X, int Y, AnsiString ton)
+{
+ if(ton == "diez")
+ {
+  Form1->Rend(X - 25,Y - 24,ton);
+ }
+
+ if(ton == "bemol")
+ {
+  Form1->Rend(X - 25,Y - 33,ton);
  }
 }
  /*

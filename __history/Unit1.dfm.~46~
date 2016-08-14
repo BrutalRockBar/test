@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 837
-  ClientWidth = 722
+  ClientWidth = 761
   Color = clBtnHighlight
   TransparentColorValue = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -30555,7 +30555,7 @@ object Form1: TForm1
   end
   object note: TImage
     Left = 544
-    Top = 415
+    Top = 399
     Width = 38
     Height = 25
     Picture.Data = {
@@ -30958,7 +30958,7 @@ object Form1: TForm1
   end
   object up: TImage
     Left = 544
-    Top = 356
+    Top = 343
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31036,7 +31036,7 @@ object Form1: TForm1
   end
   object down: TImage
     Left = 544
-    Top = 331
+    Top = 368
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31112,6 +31112,13 @@ object Form1: TForm1
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFB0000000000000000}
   end
+  object Image1: TImage
+    Left = 541
+    Top = 438
+    Width = 41
+    Height = 41
+    OnClick = Image1Click
+  end
   object Memo1: TMemo
     Left = 544
     Top = 39
@@ -31120,7 +31127,7 @@ object Form1: TForm1
     TabOrder = 0
   end
   object Button1: TButton
-    Left = 544
+    Left = 515
     Top = 8
     Width = 75
     Height = 25
@@ -31129,7 +31136,7 @@ object Form1: TForm1
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 639
+    Left = 610
     Top = 8
     Width = 75
     Height = 25
@@ -31144,7 +31151,31 @@ object Form1: TForm1
     Height = 25
     Caption = 'Button3'
     TabOrder = 3
-    OnClick = Button3Click
+  end
+  object Panel1: TPanel
+    Left = 697
+    Top = 0
+    Width = 64
+    Height = 837
+    Align = alRight
+    Caption = 'Panel1'
+    TabOrder = 4
+    object Edit1: TEdit
+      Left = 8
+      Top = 10
+      Width = 121
+      Height = 21
+      TabOrder = 0
+      Text = 'Edit1'
+    end
+    object Edit2: TEdit
+      Left = 519
+      Top = 200
+      Width = 121
+      Height = 21
+      TabOrder = 1
+      Text = 'Edit2'
+    end
   end
   object ADOQuery1: TADOQuery
     ConnectionString = 
@@ -31152,6 +31183,13 @@ object Form1: TForm1
       ';Persist Security Info=False'
     Parameters = <>
     Left = 552
+    Top = 280
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 5
+    OnTimer = Timer1Timer
+    Left = 600
     Top = 280
   end
 end

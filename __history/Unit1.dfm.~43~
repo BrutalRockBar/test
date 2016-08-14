@@ -30554,8 +30554,8 @@ object Form1: TForm1
       0000}
   end
   object note: TImage
-    Left = 144
-    Top = 199
+    Left = 544
+    Top = 399
     Width = 38
     Height = 25
     Picture.Data = {
@@ -30958,7 +30958,7 @@ object Form1: TForm1
   end
   object up: TImage
     Left = 544
-    Top = 356
+    Top = 343
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31036,7 +31036,7 @@ object Form1: TForm1
   end
   object down: TImage
     Left = 544
-    Top = 331
+    Top = 368
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31152,11 +31152,10 @@ object Form1: TForm1
     Height = 25
     Caption = 'Button3'
     TabOrder = 3
-    OnClick = Button3Click
   end
   object Panel1: TPanel
-    Left = 41
-    Top = 20
+    Left = 1
+    Top = 660
     Width = 713
     Height = 817
     TabOrder = 4
