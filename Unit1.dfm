@@ -30554,8 +30554,8 @@ object Form1: TForm1
       0000}
   end
   object note: TImage
-    Left = 144
-    Top = 199
+    Left = 544
+    Top = 399
     Width = 38
     Height = 25
     Picture.Data = {
@@ -30958,7 +30958,7 @@ object Form1: TForm1
   end
   object up: TImage
     Left = 544
-    Top = 356
+    Top = 343
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31036,7 +31036,7 @@ object Form1: TForm1
   end
   object down: TImage
     Left = 544
-    Top = 331
+    Top = 368
     Width = 38
     Height = 19
     Picture.Data = {
@@ -31112,6 +31112,14 @@ object Form1: TForm1
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFB0000000000000000}
   end
+  object SpeedButton2: TSpeedButton
+    Left = 691
+    Top = 8
+    Width = 23
+    Height = 22
+    Caption = '<'
+    OnClick = SpeedButton2Click
+  end
   object Memo1: TMemo
     Left = 544
     Top = 39
@@ -31120,7 +31128,7 @@ object Form1: TForm1
     TabOrder = 0
   end
   object Button1: TButton
-    Left = 544
+    Left = 515
     Top = 8
     Width = 75
     Height = 25
@@ -31129,7 +31137,7 @@ object Form1: TForm1
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 639
+    Left = 610
     Top = 8
     Width = 75
     Height = 25
@@ -31144,7 +31152,69 @@ object Form1: TForm1
     Height = 25
     Caption = 'Button3'
     TabOrder = 3
-    OnClick = Button3Click
+  end
+  object Panel1: TPanel
+    Left = 1
+    Top = 660
+    Width = 713
+    Height = 817
+    TabOrder = 4
+    object SpeedButton1: TSpeedButton
+      Left = 14
+      Top = 8
+      Width = 23
+      Height = 22
+      Caption = '>'
+      OnClick = SpeedButton1Click
+    end
+    object Edit1: TEdit
+      Left = 208
+      Top = 80
+      Width = 121
+      Height = 21
+      TabOrder = 0
+      Text = 'Edit1'
+    end
+    object Edit2: TEdit
+      Left = 240
+      Top = 144
+      Width = 121
+      Height = 21
+      TabOrder = 1
+      Text = 'Edit2'
+    end
+    object Button4: TButton
+      Left = 176
+      Top = 184
+      Width = 75
+      Height = 25
+      Caption = 'Button4'
+      TabOrder = 2
+    end
+    object Button5: TButton
+      Left = 112
+      Top = 232
+      Width = 75
+      Height = 25
+      Caption = 'Button5'
+      TabOrder = 3
+    end
+    object Button6: TButton
+      Left = 304
+      Top = 352
+      Width = 75
+      Height = 25
+      Caption = 'Button6'
+      TabOrder = 4
+    end
+    object CheckBox1: TCheckBox
+      Left = 368
+      Top = 264
+      Width = 97
+      Height = 17
+      Caption = 'CheckBox1'
+      TabOrder = 5
+    end
   end
   object ADOQuery1: TADOQuery
     ConnectionString = 
@@ -31153,5 +31223,9 @@ object Form1: TForm1
     Parameters = <>
     Left = 552
     Top = 280
+  end
+  object IdAntiFreeze1: TIdAntiFreeze
+    Left = 304
+    Top = 696
   end
 end
