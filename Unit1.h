@@ -17,28 +17,37 @@
 #include <IdAntiFreezeBase.hpp>
 #include <IdBaseComponent.hpp>
 #include <Vcl.IdAntiFreeze.hpp>
+#include <System.ImageList.hpp>
+#include <Vcl.ImgList.hpp>
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
-	TMemo *Memo1;
-	TButton *Button1;
-	TImage *stan;
 	TImage *note;
 	TImage *bemol;
 	TImage *diez;
 	TImage *line;
-	TButton *Button2;
-	TButton *Button3;
 	TImage *up;
 	TImage *down;
 	TADOQuery *ADOQuery1;
-	TPanel *Panel1;
 	TTimer *Timer1;
-	TImage *Image1;
-	TPanel *Panel2;
-	TButton *Button4;
 	TTimer *Timer2;
+	TImage *fon;
+	TImage *Image2;
+	TImage *Xa;
+	TImage *a1;
+	TImage *b1;
+	TImage *a2;
+	TImage *b2;
+	TImage *Xb;
+	TPanel *Panel2;
+	TImage *stan;
+	TPanel *Panel1;
+	TImage *Image1;
+	TButton *Button1;
+	TButton *Button2;
+	TButton *Button3;
+	TMemo *Memo1;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Rend(int X, int Y, AnsiString obj);
@@ -47,8 +56,13 @@ __published:	// IDE-managed Components
 	void __fastcall Button2Click(TObject *Sender);
 	void __fastcall Timer1Timer(TObject *Sender);
 	void __fastcall Image1Click(TObject *Sender);
-	void __fastcall Button4Click(TObject *Sender);
 	void __fastcall Timer2Timer(TObject *Sender);
+	void __fastcall Image2Click(TObject *Sender);
+	void __fastcall Image2MouseEnter(TObject *Sender);
+	void __fastcall Image2MouseLeave(TObject *Sender);
+	void __fastcall Image1MouseEnter(TObject *Sender);
+	void __fastcall Image1MouseLeave(TObject *Sender);
+
 private:	// User declarations
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);

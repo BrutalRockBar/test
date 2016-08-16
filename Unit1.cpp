@@ -70,9 +70,9 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
  TableSet();
 
  Panel1->Top = 0;
- Panel1->Width = this->Width;
- Panel1->Height = this->Height;
- Panel1->Left = this->Width - 24;
+ Panel1->Width = Panel2->Width;
+ Panel1->Height = Panel2->Height;
+ Panel1->Left = Panel2->Width - 19; 
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
@@ -274,7 +274,6 @@ void DrawTon(int X, int Y, AnsiString ton)
  }
  */
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::Timer1Timer(TObject *Sender)
 {
  if(Panel1->Left >= 100)
@@ -287,21 +286,23 @@ void __fastcall TForm1::Timer1Timer(TObject *Sender)
   Timer1->Enabled = false;
   Panel1->Left = 0;
   PanelMode = 1;
+  Image1->Picture->Bitmap = a2->Picture->Bitmap;
  }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Timer2Timer(TObject *Sender)
 {
-  if(Panel1->Left <= this->Width - 100)
+ if(Panel1->Left <= Panel2->Width - 100)
  {
   Panel1->Left = Panel1->Left + 100;
  }
 
- if(Panel1->Left >= this->Width - 100)
+ if(Panel1->Left >= Panel2->Width - 100)
  {
   Timer2->Enabled = false;
-  Panel1->Left = this->Width - 24;
+  Panel1->Left = Panel2->Width - 19;
   PanelMode = 0;
+  Image1->Picture->Bitmap = a1->Picture->Bitmap;
  }
 }
 //---------------------------------------------------------------------------
@@ -311,10 +312,30 @@ void __fastcall TForm1::Image1Click(TObject *Sender)
  else Timer2->Enabled = true;
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button4Click(TObject *Sender)
-{
- this->Close();
+void __fastcall TForm1::Image2Click(TObject *Sender)
+{ this->Close();
 }
 //---------------------------------------------------------------------------
-
+void __fastcall TForm1::Image2MouseEnter(TObject *Sender)
+{
+ Image2->Picture->Bitmap = Xb->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Image2MouseLeave(TObject *Sender)
+{
+ Image2->Picture->Bitmap = Xa->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Image1MouseEnter(TObject *Sender)
+{
+ if(PanelMode == 0) Image1->Picture->Bitmap = b1->Picture->Bitmap;
+ else Image1->Picture->Bitmap = b2->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Image1MouseLeave(TObject *Sender)
+{
+ if(PanelMode == 0) Image1->Picture->Bitmap = a1->Picture->Bitmap;
+ else Image1->Picture->Bitmap = a2->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
 
