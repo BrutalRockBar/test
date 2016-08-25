@@ -180,7 +180,7 @@ void DrawLine(int X,int Y,AnsiString clef)
  if(clef == "Басовый" && Y < 338)
  {
   param = 1;
-  XClef = 338;
+  XClef = 383;
  }
  if(clef == "Басовый" && Y > 479)
  {
@@ -338,4 +338,71 @@ void __fastcall TForm1::Image1MouseLeave(TObject *Sender)
  else Image1->Picture->Bitmap = a2->Picture->Bitmap;
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::Button4Click(TObject *Sender)
+{
+ Random();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Random(void)
+{
+ Reload();
 
+ int key;
+ int X = 120 + rand() % (420-120);
+ int Y;
+
+ //ключ
+ int clef = 1 + rand() % 2;
+
+ //клавиша и её координата по Y
+ if(clef == 1) //басовый
+ {
+  ADOTable1->Active = true;
+  ADOTable1->RecNo = 1 + rand() % 32;
+  key = ADOTable1->FieldByName(db.Bas.nomer_key)->AsInteger;
+  ADOTable1->Active = false;
+
+  ADOQuery1->SQL->Text="SELECT * FROM `"+db.Bas.Table_name+"` WHERE `"+db.Bas.nomer_key+"` LIKE '"+key+"'";
+  ADOQuery1->Open();
+  Y = ADOQuery1->FieldByName(db.Bas.Y_note)->AsInteger;
+  ADOQuery1->Close();
+
+  DrawLine(X,Y,"Басовый");
+ }
+ else  //скрипичный
+ {
+  ADOTable2->Active = true;
+  ADOTable2->RecNo = 1 + rand() % 35;
+  key = ADOTable2->FieldByName(db.Skrip.nomer_key)->AsInteger;
+  ADOTable2->Active = false;
+
+  ADOQuery1->SQL->Text="SELECT * FROM `"+db.Skrip.Table_name+"` WHERE `"+db.Skrip.nomer_key+"` LIKE '"+key+"'";
+  ADOQuery1->Open();
+  Y = ADOQuery1->FieldByName(db.Skrip.Y_note)->AsInteger;
+  ADOQuery1->Close();
+
+  DrawLine(X,Y,"Скрипичный");
+ }
+
+ Rend(X,Y,"note");
+ DrawOktava(X,key);
+
+ //тон
+ switch(rand() % 3) {
+	case 1:
+		 DrawTon(X, Y, "bemol");
+		 key--;
+		break;
+	case 2:
+		 DrawTon(X, Y, "diez");
+		 key++;
+		break;
+	}
+
+
+ Memo1->Lines->Add("Клавиша: "+IntToStr(key));
+ Memo1->Lines->Add("X: "+IntToStr(X));
+ Memo1->Lines->Add("Y: "+IntToStr(Y));
+ Memo1->Lines->Add("Ключ: "+IntToStr(clef));
+}
+//---------------------------------------------------------------------------
