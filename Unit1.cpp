@@ -13,6 +13,10 @@ HMIDIIN hMidiIn;
 Graphics::TBitmap * bmpDefault;
 Graphics::TBitmap * bmp;
 int PanelMode = 0;
+int KeyDwn;
+int KeyRand;
+int KeyTimer;
+
 struct TDataBase
 {
  struct TStan
@@ -113,14 +117,23 @@ void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		Form1->Memo1->Lines->Add((AnsiString)"wMsg = unknown");
 		break;
 	}
- Form1->Memo1->Lines->Add("-----");
 }
 //---------------------------------------------------------------------------
 void Note(DWORD dwParam1)
 {
  char s[20];
  itoa(dwParam1,s,8);
- Form1->Memo1->Lines->Add(s);
+ AnsiString ss = s;
+ if(s[6] == '0')
+ {
+  ss.Delete(1,3);
+  ss.Delete(4,2);
+
+  Form1->ADOQuery1->SQL->Text="SELECT * FROM `"+db.Key.Table_name+"` WHERE `"+db.Key.kod_sound+"` LIKE '"+ss.ToInt()+"'";
+  Form1->ADOQuery1->Open();
+  KeyDwn = Form1->ADOQuery1->FieldByName(db.Key.nomer_key)->AsInteger;
+  Form1->ADOQuery1->Close();
+ }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Rend(int X, int Y, AnsiString obj)
@@ -338,11 +351,6 @@ void __fastcall TForm1::Image1MouseLeave(TObject *Sender)
  else Image1->Picture->Bitmap = a2->Picture->Bitmap;
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button4Click(TObject *Sender)
-{
- Random();
-}
-//---------------------------------------------------------------------------
 void __fastcall TForm1::Random(void)
 {
  Reload();
@@ -398,11 +406,30 @@ void __fastcall TForm1::Random(void)
 		 key++;
 		break;
 	}
-
-
- Memo1->Lines->Add("Клавиша: "+IntToStr(key));
- Memo1->Lines->Add("X: "+IntToStr(X));
- Memo1->Lines->Add("Y: "+IntToStr(Y));
- Memo1->Lines->Add("Ключ: "+IntToStr(clef));
+  KeyRand = key;
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::Button4Click(TObject *Sender)
+{
+ Random();
+ Timer3->Enabled = true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button5Click(TObject *Sender)
+{
+ Timer3->Enabled = false;
+ Reload();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Timer3Timer(TObject *Sender)
+{
+ if(KeyTimer != KeyDwn)
+ {
+  if(KeyDwn == KeyRand) Random();
+  KeyTimer = KeyDwn;
+ }
+
+}
+//---------------------------------------------------------------------------
+

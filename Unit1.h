@@ -51,6 +51,9 @@ __published:	// IDE-managed Components
 	TButton *Button4;
 	TADOTable *ADOTable1;
 	TADOTable *ADOTable2;
+	TButton *Button5;
+	TTimer *Timer3;
+	TADOTable *ADOTable3;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Rend(int X, int Y, AnsiString obj);
@@ -67,6 +70,8 @@ __published:	// IDE-managed Components
 	void __fastcall Image1MouseLeave(TObject *Sender);
 	void __fastcall Random(void);
 	void __fastcall Button4Click(TObject *Sender);
+	void __fastcall Button5Click(TObject *Sender);
+	void __fastcall Timer3Timer(TObject *Sender);
 
 private:	// User declarations
 public:		// User declarations
