@@ -13,28 +13,40 @@ HMIDIIN hMidiIn;
 Graphics::TBitmap * bmpDefault;
 Graphics::TBitmap * bmp;
 int PanelMode = 0;
+int PlSt = 0;
 int KeyDwn;
 int KeyRand;
 int KeyTimer;
+
 
 struct TDataBase
 {
  struct TStan
  {
-   AnsiString Table_name;
-   AnsiString nomer_key;
-   AnsiString Y_note;
+  AnsiString Table_name;
+  AnsiString nomer_key;
+  AnsiString Y_note;
  };
 
  struct TKey
  {
-   AnsiString Table_name;
-   AnsiString nomer_key;
-   AnsiString kod_sound;
+  AnsiString Table_name;
+  AnsiString nomer_key;
+  AnsiString kod_sound;
+ };
+
+ struct TResult
+ {
+  AnsiString Table_name;
+  AnsiString DT;
+  AnsiString PlayTime;
+  AnsiString Err;
+  AnsiString Speed;
  };
  TStan Skrip;
  TStan Bas;
  TKey Key;
+ TResult Result;
 };
 TDataBase db;
 //---------------------------------------------------------------------------
@@ -56,6 +68,12 @@ void TableSet(void)
  db.Key.Table_name = "Клавиши";
  db.Key.nomer_key = "Номер клавиши";
  db.Key.kod_sound = "Звук клавиши";
+
+ db.Result.Table_name = "Результаты";
+ db.Result.DT = "Дата";
+ db.Result.PlayTime = "Продолжительность";
+ db.Result.Err = "Ошибок";
+ db.Result.Speed = "Скорость";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -76,7 +94,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
  Panel1->Top = 0;
  Panel1->Width = Panel2->Width;
  Panel1->Height = Panel2->Height;
- Panel1->Left = Panel2->Width - 19; 
+ Panel1->Left = Panel2->Width - 19;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
@@ -91,17 +109,17 @@ void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 											DWORD dwParam1, DWORD dwParam2)
 {
  switch(wMsg) {
-	case MIM_OPEN:
+   /*	case MIM_OPEN:
 		Form1->Memo1->Lines->Add("wMsg=MIM_OPEN");
 		break;
 	case MIM_CLOSE:
 		Form1->Memo1->Lines->Add("wMsg=MIM_CLOSE");
 		break;
-	case MIM_DATA:
+	case MIM_DATA: */
 		//Form1->Memo1->Lines->Add((AnsiString)"wMsg=MIM_DATA, dwInstance="+dwInstance+", dwParam1="+dwParam1+", dwParam2="+dwParam2+"");
 		Note(dwParam1);
 		break;
-	case MIM_LONGDATA:
+   /*	case MIM_LONGDATA:
 		Form1->Memo1->Lines->Add("wMsg=MIM_LONGDATA");
 		break;
 	case MIM_ERROR:
@@ -115,7 +133,7 @@ void CALLBACK midiCallback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		break;
 	default:
 		Form1->Memo1->Lines->Add((AnsiString)"wMsg = unknown");
-		break;
+		break; */
 	}
 }
 //---------------------------------------------------------------------------
@@ -158,19 +176,6 @@ void __fastcall TForm1::Rend(int X, int Y, AnsiString obj)
 void __fastcall TForm1::Reload(void)
 {
   stan->Canvas->Draw(0,0,bmpDefault);
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::Button1Click(TObject *Sender)
-{
- Rend(120,23,"note");
- DrawLine(120,23,"Скрипичный");
- DrawOktava(120,88);
- DrawTon(120, 23, "diez");
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::Button2Click(TObject *Sender)
-{
-  Reload();
 }
 //---------------------------------------------------------------------------
 void DrawLine(int X,int Y,AnsiString clef)
@@ -300,6 +305,7 @@ void __fastcall TForm1::Timer1Timer(TObject *Sender)
   Panel1->Left = 0;
   PanelMode = 1;
   Image1->Picture->Bitmap = a2->Picture->Bitmap;
+  ADOTable1->Active = true;
  }
 }
 //---------------------------------------------------------------------------
@@ -316,17 +322,15 @@ void __fastcall TForm1::Timer2Timer(TObject *Sender)
   Panel1->Left = Panel2->Width - 19;
   PanelMode = 0;
   Image1->Picture->Bitmap = a1->Picture->Bitmap;
+  ADOTable1->Active = false;
  }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Image1Click(TObject *Sender)
-{
- if(PanelMode == 0) Timer1->Enabled = true;
- else Timer2->Enabled = true;
-}
-//---------------------------------------------------------------------------
+
+
 void __fastcall TForm1::Image2Click(TObject *Sender)
-{ this->Close();
+{
+ this->Close();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Image2MouseEnter(TObject *Sender)
@@ -337,6 +341,16 @@ void __fastcall TForm1::Image2MouseEnter(TObject *Sender)
 void __fastcall TForm1::Image2MouseLeave(TObject *Sender)
 {
  Image2->Picture->Bitmap = Xa->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+
+
+
+
+void __fastcall TForm1::Image1Click(TObject *Sender)
+{
+  if(PanelMode == 0) Form1->Timer1->Enabled = true;
+  else Form1->Timer2->Enabled = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Image1MouseEnter(TObject *Sender)
@@ -351,6 +365,10 @@ void __fastcall TForm1::Image1MouseLeave(TObject *Sender)
  else Image1->Picture->Bitmap = a2->Picture->Bitmap;
 }
 //---------------------------------------------------------------------------
+
+
+
+
 void __fastcall TForm1::Random(void)
 {
  Reload();
@@ -365,13 +383,10 @@ void __fastcall TForm1::Random(void)
  //клавиша и её координата по Y
  if(clef == 1) //басовый
  {
-  ADOTable1->Active = true;
-  ADOTable1->RecNo = 1 + rand() % 32;
-  key = ADOTable1->FieldByName(db.Bas.nomer_key)->AsInteger;
-  ADOTable1->Active = false;
-
-  ADOQuery1->SQL->Text="SELECT * FROM `"+db.Bas.Table_name+"` WHERE `"+db.Bas.nomer_key+"` LIKE '"+key+"'";
+  ADOQuery1->SQL->Text = "SELECT * FROM `"+db.Bas.Table_name+"`";
   ADOQuery1->Open();
+  ADOQuery1->RecNo = 1 + rand() % 32;
+  key = ADOQuery1->FieldByName(db.Bas.nomer_key)->AsInteger;
   Y = ADOQuery1->FieldByName(db.Bas.Y_note)->AsInteger;
   ADOQuery1->Close();
 
@@ -379,13 +394,10 @@ void __fastcall TForm1::Random(void)
  }
  else  //скрипичный
  {
-  ADOTable2->Active = true;
-  ADOTable2->RecNo = 1 + rand() % 35;
-  key = ADOTable2->FieldByName(db.Skrip.nomer_key)->AsInteger;
-  ADOTable2->Active = false;
-
-  ADOQuery1->SQL->Text="SELECT * FROM `"+db.Skrip.Table_name+"` WHERE `"+db.Skrip.nomer_key+"` LIKE '"+key+"'";
+  ADOQuery1->SQL->Text = "SELECT * FROM `"+db.Skrip.Table_name+"`";
   ADOQuery1->Open();
+  ADOQuery1->RecNo = 1 + rand() % 35;
+  key = ADOQuery1->FieldByName(db.Skrip.nomer_key)->AsInteger;
   Y = ADOQuery1->FieldByName(db.Skrip.Y_note)->AsInteger;
   ADOQuery1->Close();
 
@@ -409,19 +421,6 @@ void __fastcall TForm1::Random(void)
   KeyRand = key;
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button4Click(TObject *Sender)
-{
- Random();
- Timer3->Enabled = true;
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TForm1::Button5Click(TObject *Sender)
-{
- Timer3->Enabled = false;
- Reload();
-}
-//---------------------------------------------------------------------------
 void __fastcall TForm1::Timer3Timer(TObject *Sender)
 {
  if(KeyTimer != KeyDwn)
@@ -432,4 +431,76 @@ void __fastcall TForm1::Timer3Timer(TObject *Sender)
 
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::StartStop(AnsiString mode)
+{
+ if(mode == "Start")
+ {
+  PlayStop->Picture->Bitmap = s1->Picture->Bitmap;
+  PlSt = 1;
+
+  Random();
+  Timer3->Enabled = true;
+
+   AnsiString query_text = "INSERT INTO `"+db.Result.Table_name+"` ( `"
+										 +db.Result.DT+"`) VALUES ('"+Now().FormatString("DD.MM.YYYY hh:nn:ss")+"')";
+   ADOQuery1->SQL->Text = query_text;
+   ADOQuery1->ExecSQL();
+ }
+
+ if(mode == "Stop")
+ {
+  PlayStop->Picture->Bitmap = p1->Picture->Bitmap;
+  PlSt = 0;
+
+  Timer3->Enabled = false;
+  Reload();
+ }
+}
+
+
+
+
+void __fastcall TForm1::PlayStopClick(TObject *Sender)
+{
+ if(PlSt == 0)StartStop("Start");
+ else StartStop("Stop");
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::PlayStopMouseEnter(TObject *Sender)
+{
+ if(PlSt == 0) PlayStop->Picture->Bitmap = p1->Picture->Bitmap;
+ else PlayStop->Picture->Bitmap = s1->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::PlayStopMouseLeave(TObject *Sender)
+{
+ if(PlSt == 0) PlayStop->Picture->Bitmap = p2->Picture->Bitmap;
+ else PlayStop->Picture->Bitmap = s2->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+
+
+
+
+void __fastcall TForm1::ClearBtnClick(TObject *Sender)
+{
+  if(Application->MessageBoxW(L"Все сохранённые данные будут удалены. Продолжить?",L"Удаление результатов",MB_YESNO) == IDYES)
+  {
+   ADOTable1->Active = false;
+   ADOQuery1->SQL->Text = "DELETE FROM `"+db.Result.Table_name+"`";
+   ADOQuery1->ExecSQL();
+  }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ClearBtnMouseEnter(TObject *Sender)
+{
+ ClearBtn->Picture->Bitmap = ClearBtn2->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ClearBtnMouseLeave(TObject *Sender)
+{
+ ClearBtn->Picture->Bitmap = ClearBtn1->Picture->Bitmap;
+}
+//---------------------------------------------------------------------------
+
 
