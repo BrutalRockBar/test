@@ -14,6 +14,7 @@ Graphics::TBitmap * bmpDefault;
 Graphics::TBitmap * bmp;
 int PanelMode = 0;
 int PlSt = 0;
+int Err = 0;
 int KeyDwn;
 int KeyRand;
 int KeyTimer;
@@ -425,10 +426,19 @@ void __fastcall TForm1::Timer3Timer(TObject *Sender)
 {
  if(KeyTimer != KeyDwn)
  {
-  if(KeyDwn == KeyRand) Random();
+  if(KeyDwn == KeyRand)
+  {
+   Random();
+   Err = 0;
+  }
+  else if(Err != 1)   //ошибся нотой
+  {
+   Err = 1;
+   ADOQuery1->SQL->Text="UPDATE `"+db.Result.Table_name+"` SET `"+db.Result.Err+"` = `"+db.Result.Err+"` + 1 WHERE `"+db.Result.DT+"` = (SELECT MAX(`"+db.Result.DT+"`) FROM `"+db.Result.Table_name+"`)";
+   ADOQuery1->ExecSQL();
+  }
   KeyTimer = KeyDwn;
  }
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::StartStop(AnsiString mode)
@@ -437,6 +447,7 @@ void __fastcall TForm1::StartStop(AnsiString mode)
  {
   PlayStop->Picture->Bitmap = s1->Picture->Bitmap;
   PlSt = 1;
+  Err = 0;
 
   Random();
   Timer3->Enabled = true;
